@@ -3,10 +3,14 @@
   <head>
     <title>Super fun page of awesomeness!</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <script src="./node_modules/lodash/index.js"></script>
   </head>
   <body>
     <script>
       console.log('Hooray for Cali!');
+      _.each([1,2,3,4,5], function(item) {
+        console.log(item);
+      });
     </script>
   </body>
 </html>
