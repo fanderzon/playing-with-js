@@ -34,29 +34,48 @@
 
         this.element = document.createElement('div');
         this.element.className = 'tile';
+        this.draw();
+      }
+
+      Tile.prototype.draw = function tileDraw() {
         var s = this.element.style;
         s.backgroundImage = 'url(' + this.sprite.image + ')';
         s.width = this.sprite.tileWidth + 'px';
         s.height = this.sprite.tileHeight + 'px';
-
         s.backgroundPosition = '-' +
             ( (this.column-1) * this.sprite.tileWidth + ((this.column-1) * this.spacing) ) +
             'px -' +
-            ( (this.row-1) * this.sprite.tileHeight + ((this.row-1) * this.spacing) ) +
-            'px';
+            ( (this.row-1) * this.sprite.tileHeight + ((this.row-1) * this.spacing) )+
+            'px ';
       }
 
+      Tile.prototype.appendTo = function appendTo(appendTo, qty) {
+        qty = qty || 1;
+
+        if (qty === 1) {
+          appendTo.appendChild(this.element);
+          return this;
+        }
+
+        for (var i = 0; i < qty; i++) {
+          appendTo.appendChild(new Tile(this).element);
+        }
+        return this;
+      };
+
+      var mySprite = new Sprite({
+        image: './assets/sprites/elements.png',
+        tileWidth: 16,
+        tileHeight: 16
+      });
+
       var myTile = new Tile({
-        sprite: new Sprite({
-          image: './assets/sprites/elements.png',
-          tileWidth: 16,
-          tileHeight: 16
-        }),
+        sprite: mySprite,
         row: 2,
         column: 3,
         spacing: 1
-      });
-      document.body.appendChild(myTile.element);
+      })
+        .appendTo(document.body, 100);
     </script>
   </body>
 </html>
