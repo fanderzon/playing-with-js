@@ -4,6 +4,13 @@
     <title>Super fun page of awesomeness!</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <script src="./node_modules/lodash/index.js"></script>
+    <style>
+    .tile {
+      margin: 0px;
+      padding: 0px;
+      float: left;
+    }
+  </style>
   </head>
   <body>
     <script>
@@ -13,6 +20,43 @@
         this.tileWidth = conf.tileWidth || 16;
         this.tileHeight = conf.tileHeight || 16;
       }
+
+      function Tile(conf) {
+        conf = conf || {};
+        this.sprite = conf.sprite || '';
+        this.row = conf.row || 1;
+        this.column = conf.column || 1;
+        if (conf.spacing || conf.spacing === 0) {
+          this.spacing = conf.spacing;
+        } else {
+          this.spacing = 1;
+        }
+
+        this.element = document.createElement('div');
+        this.element.className = 'tile';
+        var s = this.element.style;
+        s.backgroundImage = 'url(' + this.sprite.image + ')';
+        s.width = this.sprite.tileWidth + 'px';
+        s.height = this.sprite.tileHeight + 'px';
+
+        s.backgroundPosition = '-' +
+            ( (this.column-1) * this.sprite.tileWidth + ((this.column-1) * this.spacing) ) +
+            'px -' +
+            ( (this.row-1) * this.sprite.tileHeight + ((this.row-1) * this.spacing) ) +
+            'px';
+      }
+
+      var myTile = new Tile({
+        sprite: new Sprite({
+          image: './assets/sprites/elements.png',
+          tileWidth: 16,
+          tileHeight: 16
+        }),
+        row: 2,
+        column: 3,
+        spacing: 1
+      });
+      document.body.appendChild(myTile.element);
     </script>
   </body>
 </html>
