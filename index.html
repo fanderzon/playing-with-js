@@ -5,6 +5,10 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <script src="./node_modules/lodash/index.js"></script>
     <style>
+    #board {
+      overflow: hidden;
+      position: relative;
+    }
     .tile {
       margin: 0px;
       padding: 0px;
@@ -13,7 +17,32 @@
   </style>
   </head>
   <body>
+    <div id="board"></div>
     <script>
+      function Board(conf) {
+        conf = conf || {};
+        this.element = conf.element || document.getElementById('board');
+        this.tileSize = conf.tileSize || 16;
+        this.rowCount = conf.rowCount || 1;
+        this.columnCount = conf.columnCount || 1;
+        this.sprites = conf.sprites || new Sprite({
+          image: conf.spriteImage || 'assets/sprites/elements.png',
+          imageWidth: this.tileSize,
+          imageHeight: this.tileSize
+        });
+
+        var s = this.element.style;
+            s.width = (this.tileSize * this.columnCount) + 'px';
+            s.height = (this.tileSize * this.rowCount) + 'px';
+
+        var floorBoard = new Tile({
+          sprite: this.sprites,
+          row: 18,
+          column: 36
+        })
+          .appendTo(this.element, (this.rowCount * this.columnCount));
+      }
+
       function Sprite(conf) {
         conf = conf || {};
         this.image = conf.image || '';
@@ -63,19 +92,14 @@
         return this;
       };
 
-      var mySprite = new Sprite({
-        image: './assets/sprites/elements.png',
-        tileWidth: 16,
-        tileHeight: 16
+
+      var board = new Board({
+          element: document.getElementById('board'),
+          rowCount: 10,
+          columnCount: 20
       });
 
-      var myTile = new Tile({
-        sprite: mySprite,
-        row: 2,
-        column: 3,
-        spacing: 1
-      })
-        .appendTo(document.body, 100);
+
     </script>
   </body>
 </html>
