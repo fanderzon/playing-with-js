@@ -8,6 +8,7 @@
     #board {
       overflow: hidden;
       position: relative;
+      transform-origin: 0px 0px;
     }
     .tile {
       margin: 0px;
@@ -25,6 +26,7 @@
         this.tileSize = conf.tileSize || 16;
         this.rowCount = conf.rowCount || 1;
         this.columnCount = conf.columnCount || 1;
+        this.scaleFactor = conf.scaleFactor || 1;
         this.sprites = conf.sprites || new Sprite({
           image: conf.spriteImage || 'assets/sprites/elements.png',
           imageWidth: this.tileSize,
@@ -34,6 +36,7 @@
         var s = this.element.style;
             s.width = (this.tileSize * this.columnCount) + 'px';
             s.height = (this.tileSize * this.rowCount) + 'px';
+            s.transform = 'scale(' + this.scaleFactor + ')';
 
         var floorBoard = new Tile({
           sprite: this.sprites,
@@ -96,7 +99,8 @@
       var board = new Board({
           element: document.getElementById('board'),
           rowCount: 10,
-          columnCount: 20
+          columnCount: 20,
+          scaleFactor: 4
       });
 
 
