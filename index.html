@@ -23,6 +23,11 @@
       top: 0px;
       background: transparent;
     }
+    .actor {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+    }
   </style>
   </head>
   <body>
@@ -142,6 +147,12 @@
         });
       }
 
+      Actor.prototype.constants = {};
+      Actor.prototype.constants.FACE_UP = 1;
+      Actor.prototype.constants.FACE_RIGHT = 2;
+      Actor.prototype.constants.FACE_DOWN = 3;
+      Actor.prototype.constants.FACE_LEFT = 4;
+
       Actor.prototype.draw = function actorDraw() {
         var s = this.element.style;
             s.top = ( (this.position.row - 1) * board.tileSize ) + 'px';
@@ -150,6 +161,15 @@
         return this;
       };
 
+      Actor.prototype.moveRight = function actorMoveRight() {
+        this.tile.column = Actor.prototype.constants.FACE_RIGHT;
+        this.tile.draw();
+        if (this.position.column + 1 <= board.columnCount) {
+          this.position.column++;
+        }
+        this.draw();
+        return this;
+      };
 
       var board = new Board({
           element: document.getElementById('board'),
