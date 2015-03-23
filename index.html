@@ -161,15 +161,46 @@
         return this;
       };
 
-      Actor.prototype.moveRight = function actorMoveRight() {
-        this.tile.column = Actor.prototype.constants.FACE_RIGHT;
-        this.tile.draw();
-        if (this.position.column + 1 <= board.columnCount) {
-          this.position.column++;
+      Actor.prototype.move = function actorMove(input) {
+        switch(input){
+          case 'Right':
+            this.tile.column = Actor.prototype.constants.FACE_RIGHT;
+            this.tile.draw();
+            if (this.position.column + 1 <= board.columnCount) {
+              this.position.column++;
+            }
+            this.draw();
+            return this;
+            break;
+          case 'Left':
+            this.tile.column = Actor.prototype.constants.FACE_LEFT;
+            this.tile.draw();
+            if (this.position.column - 1 <= board.columnCount) {
+              this.position.column--;
+            }
+            this.draw();
+            return this;
+            break;
+          case 'Down':
+            this.tile.column = Actor.prototype.constants.FACE_DOWN;
+            this.tile.draw();
+            if (this.position.row + 1 <= board.rowCount) {
+              this.position.row++;
+            }
+            this.draw();
+            return this;
+            break;
+          case 'Up':
+            this.tile.column = Actor.prototype.constants.FACE_UP;
+            this.tile.draw();
+            if (this.position.row - 1 <= board.rowCount) {
+              this.position.row--;
+            }
+            this.draw();
+            return this;
+            break;
         }
-        this.draw();
-        return this;
-      };
+      }
 
       var board = new Board({
           element: document.getElementById('board'),
@@ -180,21 +211,6 @@
         .addLayer(new Layer({index: 0}))
         .addLayer(new Layer({index: 1}))
         .draw();
-
-      var cali = new Tile({
-                sprite: new Sprite({
-                  image: './assets/sprites/cali-16x16.png',
-                  tileWidth: 7,
-                  tileHeight: 16
-                }),
-                row: 1,
-                column: 2,
-                spacing: 1
-              });
-
-              cali.appendTo(board.layers[1].element, 1);
-
-          cali.draw();
 
       var cali = new Actor({
         name: 'Cali',
