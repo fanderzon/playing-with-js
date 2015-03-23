@@ -161,49 +161,25 @@
         return this;
       };
 
-      Actor.prototype.moveRight = function actorMoveRight() {
-        this.tile.column = Actor.prototype.constants.FACE_RIGHT;
-        this.tile.draw();
-        if (this.position.column + 1 <= board.columnCount) {
-          this.position.column++;
-        }
-        this.draw();
-        return this;
+      Actor.prototype.moveRight = function actorMove() {
+        cali.move('right');
       };
 
       Actor.prototype.moveLeft = function actorMoveLeft() {
-        this.tile.column = Actor.prototype.constants.FACE_LEFT;
-        this.tile.draw();
-        if (this.position.column - 1 <= board.columnCount) {
-          this.position.column--;
-        }
-        this.draw();
-        return this;
+        cali.move('left');
       };
 
       Actor.prototype.moveDown = function actorMoveDown() {
-        this.tile.column = Actor.prototype.constants.FACE_DOWN;
-        this.tile.draw();
-        if (this.position.row + 1 <= board.rowCount) {
-          this.position.row++;
-        }
-        this.draw();
-        return this;
+        cali.move('down')
       };
 
       Actor.prototype.moveUp = function actorMoveUp() {
-        this.tile.column = Actor.prototype.constants.FACE_UP;
-        this.tile.draw();
-        if (this.position.row - 1 <= board.rowCount) {
-          this.position.row--;
-        }
-        this.draw();
-        return this;
+        cali.move('up');
       };
 
       Actor.prototype.move = function actorMove(input) {
-        switch(input){
-          case 'Right':
+        switch(direction.toLowerCase()){
+          case 'right':
             this.tile.column = Actor.prototype.constants.FACE_RIGHT;
             this.tile.draw();
             if (this.position.column + 1 <= board.columnCount) {
@@ -212,7 +188,7 @@
             this.draw();
             return this;
             break;
-          case 'Left':
+          case 'left':
             this.tile.column = Actor.prototype.constants.FACE_LEFT;
             this.tile.draw();
             if (this.position.column - 1 <= board.columnCount) {
@@ -221,7 +197,7 @@
             this.draw();
             return this;
             break;
-          case 'Down':
+          case 'down':
             this.tile.column = Actor.prototype.constants.FACE_DOWN;
             this.tile.draw();
             if (this.position.row + 1 <= board.rowCount) {
@@ -230,7 +206,7 @@
             this.draw();
             return this;
             break;
-          case 'Up':
+          case 'up':
             this.tile.column = Actor.prototype.constants.FACE_UP;
             this.tile.draw();
             if (this.position.row - 1 <= board.rowCount) {
