@@ -7,10 +7,12 @@
   </head>
   <body>
     <script>
-      console.log('Hooray for Cali!');
-      _.each([1,2,3,4,5], function(item) {
-        console.log(item);
-      });
+      function Sprite(conf) {
+        conf = conf || {};
+        this.image = conf.image || '';
+        this.tileWidth = conf.tileWidth || 16;
+        this.tileHeight = conf.tileHeight || 16;
+      }
     </script>
   </body>
 </html>
