@@ -123,6 +123,33 @@
         return this;
       };
 
+      function Position(conf) {
+        conf = conf || {};
+        this.row = conf.row;
+        this.column = conf.column;
+      }
+
+      function Actor(conf) {
+        conf = conf || {};
+        this.name = conf.name || 'Player 1';
+        this.parent = conf.parent || document.body.appendChild('div'),
+        this.tile = conf.tile;
+        this.element = this.tile.element;
+        this.tile.element.className = 'tile actor';
+        this.position = conf.position || new Position({
+          row: 1,
+          column: 1
+        });
+      }
+
+      Actor.prototype.draw = function actorDraw() {
+        var s = this.element.style;
+            s.top = ( (this.position.row - 1) * board.tileSize ) + 'px';
+            s.left = ( (this.position.column - 1) * board.tileSize ) + 'px';
+          this.parent.appendChild(this.element);
+        return this;
+      };
+
 
       var board = new Board({
           element: document.getElementById('board'),
@@ -135,6 +162,21 @@
         .draw();
 
 
+      var cali = new Actor({
+        name: 'Cali',
+        parent: board.layers[1].element,
+        tile: new Tile({
+          sprite: new Sprite({
+            image: 'assets/sprites/cali-16x16.png',
+            tileWidth: 8,
+            tileHeight: 16
+          }),
+          spacing: 0,
+          row: 1,
+          column: 1
+        })
+      })
+        .draw();
     </script>
   </body>
 </html>
