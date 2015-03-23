@@ -161,6 +161,46 @@
         return this;
       };
 
+      Actor.prototype.moveRight = function actorMoveRight() {
+        this.tile.column = Actor.prototype.constants.FACE_RIGHT;
+        this.tile.draw();
+        if (this.position.column + 1 <= board.columnCount) {
+          this.position.column++;
+        }
+        this.draw();
+        return this;
+      };
+
+      Actor.prototype.moveLeft = function actorMoveLeft() {
+        this.tile.column = Actor.prototype.constants.FACE_LEFT;
+        this.tile.draw();
+        if (this.position.column - 1 <= board.columnCount) {
+          this.position.column--;
+        }
+        this.draw();
+        return this;
+      };
+
+      Actor.prototype.moveDown = function actorMoveDown() {
+        this.tile.column = Actor.prototype.constants.FACE_DOWN;
+        this.tile.draw();
+        if (this.position.row + 1 <= board.rowCount) {
+          this.position.row++;
+        }
+        this.draw();
+        return this;
+      };
+
+      Actor.prototype.moveUp = function actorMoveUp() {
+        this.tile.column = Actor.prototype.constants.FACE_UP;
+        this.tile.draw();
+        if (this.position.row - 1 <= board.rowCount) {
+          this.position.row--;
+        }
+        this.draw();
+        return this;
+      };
+
       Actor.prototype.move = function actorMove(input) {
         switch(input){
           case 'Right':
