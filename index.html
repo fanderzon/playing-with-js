@@ -181,6 +181,20 @@
         .addLayer(new Layer({index: 1}))
         .draw();
 
+      var cali = new Tile({
+                sprite: new Sprite({
+                  image: './assets/sprites/cali-16x16.png',
+                  tileWidth: 7,
+                  tileHeight: 16
+                }),
+                row: 1,
+                column: 2,
+                spacing: 1
+              });
+
+              cali.appendTo(board.layers[1].element, 1);
+
+          cali.draw();
 
       var cali = new Actor({
         name: 'Cali',
@@ -198,5 +212,6 @@
       })
         .draw();
     </script>
+
   </body>
 </html>
