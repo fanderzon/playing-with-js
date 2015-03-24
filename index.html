@@ -48,6 +48,14 @@
         });
       }
 
+      Board.prototype.showMessage = function boardShowMessage(message) {
+        this.layers[1].element.innerHTML = '';
+        state.clear();
+        dad = null, cali = null, wallet = null;
+        clearInterval(dadInterval);
+        alert(message);
+      };
+
       Board.prototype.draw = function boardDraw() {
         var s = this.element.style;
             s.width = (this.tileSize * this.columnCount) + 'px';
@@ -134,6 +142,50 @@
         this.column = conf.column;
       }
 
+      function State() {
+        this.player = [];
+        this.goal = [];
+        this.enemy = [];
+      }
+
+      State.prototype.clear = function stateClear() {
+        this.player = [];
+        this.goal = [];
+        this.enemy = [];
+      };
+
+      function Instruction(conf) {
+        conf = conf || {};
+        this.type = conf.type || 'player';
+      }
+
+      State.prototype.addActor = function stateAddActor(actor, type) {
+        // Type will be player, goal or enemy
+        this[type].push(actor);
+        return this;
+      }
+
+      State.prototype.update = function stateUpdate() {
+        var position = this.player[0].position;
+        //console.log('update');
+        _.each(this.enemy, function(compare) {
+          //console.log('comparing ', this.player[0].position, compare.position);
+          if (position.row === compare.position.row &&
+                position.column === compare.position.column) {
+            board.showMessage('Game over');
+            return this;
+          }
+        });
+
+        _.each(this.goal, function(compare) {
+          if (position.row === compare.position.row &&
+                position.column === compare.position.column) {
+            board.showMessage('Cali wins!!! Confetti everywhere!');
+            return this;
+          }
+        });
+      };
+
       function Actor(conf) {
         conf = conf || {};
         this.name = conf.name || 'Player 1';
@@ -215,8 +267,9 @@
             }
             this.draw();
             break;
-            return this;
         }
+        state.update();
+        return this;
       }
 
       var board = new Board({
@@ -245,25 +298,50 @@
       })
         .draw();
 
-        var dad = new Actor({
-          name: 'Dad',
-          parent: board.layers[1].element,
-          position: new Position({
-            row: 2,
-            column: 19
-          }),
-          tile: new Tile({
-            sprite: new Sprite({
-              image: 'assets/sprites/dad-16x16.png',
-              tileWidth: 12,
-              tileHeight: 16
-            }),
-            spacing: 1,
-            row: 1,
-            column: 1
-          })
-        })
-          .draw();
+    var dad = new Actor({
+      name: 'Dad',
+      parent: board.layers[1].element,
+      position: new Position({
+        row: 2,
+        column: 19
+      }),
+      tile: new Tile({
+        sprite: new Sprite({
+          image: 'assets/sprites/dad-16x16.png',
+          tileWidth: 12,
+          tileHeight: 16
+        }),
+        spacing: 1,
+        row: 1,
+        column: 1
+      })
+    })
+      .draw();
+
+    var wallet = new Actor({
+      name: 'Wallet',
+      parent: board.layers[1].element,
+      position: new Position({
+        row: Math.floor(Math.random() * (board.rowCount+1)),
+        column: Math.floor(Math.random() * (board.columnCount+1))
+      }),
+      tile: new Tile({
+        sprite: new Sprite({
+          image: 'assets/sprites/elements.png',
+          tileWidth: 16,
+          tileHeight: 16
+        }),
+        spacing: 1,
+        row: 8,
+        column: 27
+      })
+    })
+      .draw();
+
+    var state = new State()
+      .addActor(cali, 'player')
+      .addActor(dad, 'enemy')
+      .addActor(wallet, 'goal');
 
     function randomMovement(actor) {
         var directions = [
@@ -276,22 +354,26 @@
         actor.move(directions[randomNumber]);
     }
 
-    setInterval(randomMovement.bind(dad, dad), 500);
+    var dadInterval = setInterval(randomMovement.bind(dad, dad), 500);
 
     document.addEventListener('keyup', function(target) {
         console.log('key pressed', target.keyCode);
         switch (target.keyCode) {
+          case 38:
           case 87:
             cali.moveUp();
             break;
-          case 68:
-            cali.moveRight();
+          case 37:
+          case 65:
+            cali.moveLeft();
             break;
+          case 40:
           case 83:
             cali.moveDown();
             break;
-          case 65:
-            cali.moveLeft();
+          case 39:
+          case 68:
+            cali.moveRight();
             break;
         }
     });
