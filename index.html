@@ -281,7 +281,18 @@
     document.addEventListener('keyup', function(target) {
         console.log('key pressed', target.keyCode);
         switch (target.keyCode) {
-          // do stuff here?
+          case 87:
+            cali.moveUp();
+            break;
+          case 68:
+            cali.moveRight();
+            break;
+          case 83:
+            cali.moveDown();
+            break;
+          case 65:
+            cali.moveLeft();
+            break;
         }
     });
 
