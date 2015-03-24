@@ -162,22 +162,26 @@
       };
 
       Actor.prototype.moveRight = function actorMove() {
-        cali.move('right');
+        this.move('right');
+        return this
       };
 
       Actor.prototype.moveLeft = function actorMoveLeft() {
-        cali.move('left');
+        this.move('left');
+        return this
       };
 
       Actor.prototype.moveDown = function actorMoveDown() {
-        cali.move('down')
+        this.move('down')
+        return this
       };
 
       Actor.prototype.moveUp = function actorMoveUp() {
-        cali.move('up');
+        this.move('up');
+        return this
       };
 
-      Actor.prototype.move = function actorMove(input) {
+      Actor.prototype.move = function actorMove(direction) {
         switch(direction.toLowerCase()){
           case 'right':
             this.tile.column = Actor.prototype.constants.FACE_RIGHT;
@@ -186,7 +190,6 @@
               this.position.column++;
             }
             this.draw();
-            return this;
             break;
           case 'left':
             this.tile.column = Actor.prototype.constants.FACE_LEFT;
@@ -195,7 +198,6 @@
               this.position.column--;
             }
             this.draw();
-            return this;
             break;
           case 'down':
             this.tile.column = Actor.prototype.constants.FACE_DOWN;
@@ -204,7 +206,6 @@
               this.position.row++;
             }
             this.draw();
-            return this;
             break;
           case 'up':
             this.tile.column = Actor.prototype.constants.FACE_UP;
@@ -213,8 +214,8 @@
               this.position.row--;
             }
             this.draw();
-            return this;
             break;
+            return this;
         }
       }
 
