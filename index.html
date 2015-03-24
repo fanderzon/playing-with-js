@@ -244,6 +244,41 @@
         })
       })
         .draw();
+
+        var dad = new Actor({
+          name: 'Dad',
+          parent: board.layers[1].element,
+          position: new Position({
+            row: 2,
+            column: 19
+          }),
+          tile: new Tile({
+            sprite: new Sprite({
+              image: 'assets/sprites/dad-16x16.png',
+              tileWidth: 12,
+              tileHeight: 16
+            }),
+            spacing: 1,
+            row: 1,
+            column: 1
+          })
+        })
+          .draw();
+
+    function randomMovement(actor) {
+        var directions = [
+          'up',
+          'right',
+          'down',
+          'left'
+        ],
+        randomNumber = Math.floor(Math.random() * 4);
+        actor.move(directions[randomNumber]);
+    }
+
+    setInterval(randomMovement.bind(dad, dad), 500);
+
+
     </script>
 
   </body>
