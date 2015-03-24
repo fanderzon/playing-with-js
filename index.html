@@ -278,6 +278,12 @@
 
     setInterval(randomMovement.bind(dad, dad), 500);
 
+    document.addEventListener('keyup', function(target) {
+        console.log('key pressed', target.keyCode);
+        switch (target.keyCode) {
+          // do stuff here?
+        }
+    });
 
     </script>
 
