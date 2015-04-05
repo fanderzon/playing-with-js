@@ -73,9 +73,14 @@
         // or dropped
         evt.stopPropagation();
         evt.preventDefault();
+
+        // Reset our state (line count etc...)
+        reset();
+
         // The first file in the files object
         var file = (evt.target.files || evt.dataTransfer.files)[0];
 
+        // Set up a callback function on LineReader's line event and read the file
         lineReader.on('line', handleLine);
         lineReader.read(file);
       }
@@ -83,9 +88,12 @@
       function handleLine(line, next) {
         // Keep a count of total lines looped for our own use
         lineCount++;
+
+        // Create a new element and add the line number and the content
         var lineOutput = document.createElement('pre');
         lineOutput.innerHTML = lineCount + ': ' + line;
         fileOutput.appendChild(lineOutput);
+
         if (lineCount < MAX_LINES_TO_READ) {
           next();
         }
@@ -95,6 +103,13 @@
         evt.stopPropagation();
         evt.preventDefault();
         evt.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
+      }
+
+      function reset() {
+        lineCount = 0;
+        lineReader.abort();
+        lineReader = new LineReader();
+        fileOutput.innerHTML = '';
       }
 
       fileDrop.addEventListener('dragover', handleDragOver, false);
