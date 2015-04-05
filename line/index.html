@@ -4,6 +4,7 @@
     <title>Line import</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <script src="../node_modules/lodash/index.js"></script>
+    <script src="linereader.js"></script>
     <style>
       body, html {
         padding: 0;
@@ -57,10 +58,14 @@
     <output id="file-output"></output>
 
     <script>
-    var uploadArea = document.getElementById('upload-area'),
+    var reader = new FileReader(),
+        uploadArea = document.getElementById('upload-area'),
         fileDrop = document.getElementById('file-drop'),
         fileUpload = document.getElementById('file-upload'),
-        fileOutput = document.getElementById('file-output');
+        fileOutput = document.getElementById('file-output'),
+        lineReader = new LineReader(),
+        lineCount = 0,
+        MAX_LINES_TO_READ = 1000;
 
       // Triggered when a file is uploaded or dropped
       function handleFileSelect(evt) {
@@ -68,17 +73,22 @@
         // or dropped
         evt.stopPropagation();
         evt.preventDefault();
-        var files = evt.target.files || evt.dataTransfer.files; // FileList object
+        // The first file in the files object
+        var file = (evt.target.files || evt.dataTransfer.files)[0];
 
-        // files is a FileList of File objects. List some properties.
-        var output = [];
-        for (var i = 0, f; f = files[i]; i++) {
-          output.push('<li><strong>', escape(f.name), '</strong> (', f.type || 'n/a', ') - ',
-                      f.size, ' bytes, last modified: ',
-                      f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a',
-                      '</li>');
+        lineReader.on('line', handleLine);
+        lineReader.read(file);
+      }
+
+      function handleLine(line, next) {
+        // Keep a count of total lines looped for our own use
+        lineCount++;
+        var lineOutput = document.createElement('pre');
+        lineOutput.innerHTML = lineCount + ': ' + line;
+        fileOutput.appendChild(lineOutput);
+        if (lineCount < MAX_LINES_TO_READ) {
+          next();
         }
-        fileOutput.innerHTML = '<ul>' + output.join('') + '</ul>';
       }
 
       function handleDragOver(evt) {
