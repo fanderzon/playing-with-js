@@ -55,7 +55,7 @@
         clearInterval(dadInterval);
         clearInterval(dad2Interval);
         clearInterval(dad3Interval);
-        alert(message);
+        console.log(message);
       };
 
       Board.prototype.draw = function boardDraw() {
@@ -110,6 +110,10 @@
         this.element = document.createElement('div');
         this.element.className = 'tile';
         this.draw();
+      }
+
+      Tile.prototype.clone = function() {
+        return new Tile(this);
       }
 
       Tile.prototype.draw = function tileDraw() {
@@ -300,72 +304,56 @@
       })
         .draw();
 
+    var DadTile = new Tile({
+      sprite: new Sprite({
+        image: 'assets/sprites/dad-16x16.png',
+        tileWidth: 12,
+        tileHeight: 16
+      }),
+      spacing: 1,
+      row: 1,
+      column: 1
+    });
+
     var dad = new Actor({
       name: 'Dad',
       parent: board.layers[1].element,
       position: new Position({
-        row: 2,
-        column: 19
+        row: Math.floor(Math.random() * (board.rowCount) + 1),
+        column: Math.floor(Math.random() * (board.columnCount) + 1)
       }),
-      tile: new Tile({
-        sprite: new Sprite({
-          image: 'assets/sprites/dad-16x16.png',
-          tileWidth: 12,
-          tileHeight: 16
-        }),
-        spacing: 1,
-        row: 1,
-        column: 1
-      })
+      tile: DadTile.clone()
     })
       .draw();
 
-      var dad2 = new Actor({
-        name: 'Dad2',
-        parent: board.layers[1].element,
-        position: new Position({
-          row: 6,
-          column: 11
-        }),
-        tile: new Tile({
-          sprite: new Sprite({
-            image: 'assets/sprites/dad-16x16.png',
-            tileWidth: 12,
-            tileHeight: 16
-          }),
-          spacing: 1,
-          row: 1,
-          column: 1
-        })
-      })
-        .draw();
+    var dad2 = new Actor({
+      name: 'Dad2',
+      parent: board.layers[1].element,
+      position: new Position({
+        row: Math.floor(Math.random() * (board.rowCount) + 1),
+        column: Math.floor(Math.random() * (board.columnCount) + 1)
+      }),
+      tile: DadTile.clone()
+    })
+      .draw();
 
-        var dad3 = new Actor({
-          name: 'Dad3',
-          parent: board.layers[1].element,
-          position: new Position({
-            row: 3,
-            column: 8
-          }),
-          tile: new Tile({
-            sprite: new Sprite({
-              image: 'assets/sprites/dad-16x16.png',
-              tileWidth: 12,
-              tileHeight: 16
-            }),
-            spacing: 1,
-            row: 1,
-            column: 1
-          })
-        })
-          .draw();
+    var dad3 = new Actor({
+      name: 'Dad3',
+      parent: board.layers[1].element,
+      position: new Position({
+        row: Math.floor(Math.random() * (board.rowCount) + 1),
+        column: Math.floor(Math.random() * (board.columnCount) + 1)
+      }),
+      tile: DadTile.clone()
+    })
+      .draw();
 
     var wallet = new Actor({
       name: 'Wallet',
       parent: board.layers[1].element,
       position: new Position({
-        row: Math.floor(Math.random() * (board.rowCount+1)),
-        column: Math.floor(Math.random() * (board.columnCount+1))
+        row: Math.floor(Math.random() * (board.rowCount) + 1),
+        column: Math.floor(Math.random() * (board.columnCount) + 1)
       }),
       tile: new Tile({
         sprite: new Sprite({
