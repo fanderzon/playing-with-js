@@ -382,7 +382,9 @@
 
     var state = new State()
       .addActor(cali, 'player')
-      .addActor((dad, dad2, dad3), 'enemy')
+      .addActor(dad, 'enemy')
+      .addActor(dad2, 'enemy')
+      .addActor(dad3, 'enemy')
       .addActor(wallet, 'goal');
 
     function randomMovement(actor) {
