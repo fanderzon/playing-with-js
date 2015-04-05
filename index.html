@@ -51,8 +51,10 @@
       Board.prototype.showMessage = function boardShowMessage(message) {
         this.layers[1].element.innerHTML = '';
         state.clear();
-        dad = null, cali = null, wallet = null;
+        dad = null, dad2 = null, dad3= null, cali = null, wallet = null;
         clearInterval(dadInterval);
+        clearInterval(dad2Interval);
+        clearInterval(dad3Interval);
         alert(message);
       };
 
@@ -318,6 +320,46 @@
     })
       .draw();
 
+      var dad2 = new Actor({
+        name: 'Dad2',
+        parent: board.layers[1].element,
+        position: new Position({
+          row: 6,
+          column: 11
+        }),
+        tile: new Tile({
+          sprite: new Sprite({
+            image: 'assets/sprites/dad-16x16.png',
+            tileWidth: 12,
+            tileHeight: 16
+          }),
+          spacing: 1,
+          row: 1,
+          column: 1
+        })
+      })
+        .draw();
+
+        var dad3 = new Actor({
+          name: 'Dad3',
+          parent: board.layers[1].element,
+          position: new Position({
+            row: 3,
+            column: 8
+          }),
+          tile: new Tile({
+            sprite: new Sprite({
+              image: 'assets/sprites/dad-16x16.png',
+              tileWidth: 12,
+              tileHeight: 16
+            }),
+            spacing: 1,
+            row: 1,
+            column: 1
+          })
+        })
+          .draw();
+
     var wallet = new Actor({
       name: 'Wallet',
       parent: board.layers[1].element,
@@ -340,7 +382,7 @@
 
     var state = new State()
       .addActor(cali, 'player')
-      .addActor(dad, 'enemy')
+      .addActor((dad, dad2, dad3), 'enemy')
       .addActor(wallet, 'goal');
 
     function randomMovement(actor) {
@@ -355,6 +397,8 @@
     }
 
     var dadInterval = setInterval(randomMovement.bind(dad, dad), 500);
+    var dad2Interval = setInterval(randomMovement.bind(dad2, dad2), 500);
+    var dad3Interval = setInterval(randomMovement.bind(dad3, dad3), 500);
 
     document.addEventListener('keyup', function(target) {
         console.log('key pressed', target.keyCode);
