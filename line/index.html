@@ -4,14 +4,71 @@
     <title>Line import</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <script src="../node_modules/lodash/index.js"></script>
+    <style>
+      body, html {
+        padding: 0;
+        margin: 10px;
+        font-size: 1em;
+      }
+      #upload-area {
+        padding: 0;
+        margin: 0;
+      }
+      #file-drop {
+        padding: 50px 0px;
+        margin: 10px 0px;
+        border: 1px dashed #505050;
+        text-align: center;
+        font-weight: bold;
+        font-size: 1.4em;
+      }
+      .btn-file {
+          position: relative;
+          overflow: hidden;
+      }
+      .btn-file input[type=file] {
+          position: absolute;
+          top: 0;
+          right: 0;
+          min-width: 100%;
+          min-height: 100%;
+          font-size: 100px;
+          text-align: right;
+          filter: alpha(opacity=0);
+          opacity: 0;
+          outline: none;
+          background: white;
+          cursor: inherit;
+          display: block;
+      }
+    </style>
   </head>
   <body>
-    <input type="file" id="files" name="files[]" multiple />
-    <output id="list"></output>
+    <div id="upload-area">
+      <div id="file-drop">
+        <h1>Drop files here</h1>
+      </div>
+      <div id="file-upload-bar" class="alert alert-info">
+        <span class="btn btn-primary btn-file">
+            Or click here to upload a file <input type="file" id="file-upload" name="files[]" multiple />
+        </span>
+      </div>
+    </div>
+    <output id="file-output"></output>
 
     <script>
+    var uploadArea = document.getElementById('upload-area'),
+        fileDrop = document.getElementById('file-drop'),
+        fileUpload = document.getElementById('file-upload'),
+        fileOutput = document.getElementById('file-output');
+
+      // Triggered when a file is uploaded or dropped
       function handleFileSelect(evt) {
-        var files = evt.target.files; // FileList object
+        // These will stop the browser from doing what it would normally be doing when a file was uploaded
+        // or dropped
+        evt.stopPropagation();
+        evt.preventDefault();
+        var files = evt.target.files || evt.dataTransfer.files; // FileList object
 
         // files is a FileList of File objects. List some properties.
         var output = [];
@@ -21,10 +78,18 @@
                       f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a',
                       '</li>');
         }
-        document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
+        fileOutput.innerHTML = '<ul>' + output.join('') + '</ul>';
       }
 
-      document.getElementById('files').addEventListener('change', handleFileSelect, false);
+      function handleDragOver(evt) {
+        evt.stopPropagation();
+        evt.preventDefault();
+        evt.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
+      }
+
+      fileDrop.addEventListener('dragover', handleDragOver, false);
+      fileDrop.addEventListener('drop', handleFileSelect, false);
+      fileUpload.addEventListener('change', handleFileSelect, false);
     </script>
 
   </body>
