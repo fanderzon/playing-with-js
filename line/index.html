@@ -4,6 +4,7 @@
     <title>Line import</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <script src="../node_modules/lodash/index.js"></script>
+    <script src="line.js"></script>
     <script src="linereader.js"></script>
     <style>
       body, html {
@@ -42,6 +43,11 @@
           cursor: inherit;
           display: block;
       }
+      .line-date {
+        background-color: #d9edf7;
+        font-size: 1.3em;
+        color: #333
+      }
     </style>
   </head>
   <body>
@@ -65,7 +71,7 @@
         fileOutput = document.getElementById('file-output'),
         lineReader = new LineReader(),
         lineCount = 0,
-        MAX_LINES_TO_READ = 1000;
+        MAX_LINES_TO_READ = 10;
 
       // Triggered when a file is uploaded or dropped
       function handleFileSelect(evt) {
@@ -90,13 +96,42 @@
         lineCount++;
 
         // Create a new element and add the line number and the content
-        var lineOutput = document.createElement('pre');
-        lineOutput.innerHTML = lineCount + ': ' + line;
+        var lineOutput = document.createElement('pre'),
+        // Save the string we want to output for this line as a seperate variable
+        // We may want to tamper with thise without changing the line variable
+            lineValue = '' + line;
+
+        // If the line contains a new date we will get a date object here
+        // otherwise it will be null
+        var newDateObjectIfADateLine = lineUtil.newDateObjectIfADateLine(line);
+        // If we get a new date mark this line for now
+        if (newDateObjectIfADateLine) {
+          console.log(lineCount + ': ' + 'We have a line with a date: ', newDateObjectIfADateLine);
+        }
+
+        // Next we try to check if this line contains a message
+        // We get an array containing
+        //   -Full line text
+        //   -Hour
+        //   -Minute
+        //   -Name of sender
+        //   -Message text
+        // Or null if line doesn't match
+        var messageParts = lineUtil.getMessagePartsIfMessageLine(line);
+        if (messageParts) {
+          console.log(lineCount + ': ' + 'We have a line with a message: ', messageParts);
+        }
+
+        lineOutput.innerHTML = formatLine(lineCount, lineValue);
         fileOutput.appendChild(lineOutput);
 
         if (lineCount < MAX_LINES_TO_READ) {
           next();
         }
+      }
+
+      function formatLine(lineNumber, data) {
+        return lineNumber + ': ' + data;
       }
 
       function handleDragOver(evt) {
