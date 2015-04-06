@@ -3,7 +3,7 @@
   <head>
     <title>Line import</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-    <script src="../node_modules/lodash/index.js"></script>
+    <script src="lodash.js"></script>
     <script src="line.js"></script>
     <script src="linereader.js"></script>
     <style>
@@ -71,7 +71,7 @@
         fileOutput = document.getElementById('file-output'),
         lineReader = new LineReader(),
         lineCount = 0,
-        MAX_LINES_TO_READ = 10;
+        MAX_LINES_TO_READ = 10000;
 
       // Triggered when a file is uploaded or dropped
       function handleFileSelect(evt) {
