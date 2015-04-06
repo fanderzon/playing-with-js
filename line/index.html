@@ -71,7 +71,9 @@
         fileOutput = document.getElementById('file-output'),
         lineReader = new LineReader(),
         lineCount = 0,
-        MAX_LINES_TO_READ = 10000;
+        MAX_LINES_TO_READ = 10000,
+        searchTerm,
+        file;
 
       // Triggered when a file is uploaded or dropped
       function handleFileSelect(evt) {
@@ -84,7 +86,7 @@
         reset();
 
         // The first file in the files object
-        var file = (evt.target.files || evt.dataTransfer.files)[0];
+        file = (evt.target.files || evt.dataTransfer.files)[0];
 
         // Set up a callback function on LineReader's line event and read the file
         lineReader.on('line', handleLine);
@@ -96,17 +98,14 @@
         lineCount++;
 
         // Create a new element and add the line number and the content
-        var lineOutput = document.createElement('pre'),
-        // Save the string we want to output for this line as a seperate variable
-        // We may want to tamper with thise without changing the line variable
-            lineValue = '' + line;
+        var lineValue = '' + line;
 
         // If the line contains a new date we will get a date object here
         // otherwise it will be null
         var newDateObjectIfADateLine = lineUtil.newDateObjectIfADateLine(line);
         // If we get a new date mark this line for now
         if (newDateObjectIfADateLine) {
-          console.log(lineCount + ': ' + 'We have a line with a date: ', newDateObjectIfADateLine);
+          //console.log(lineCount + ': ' + 'We have a line with a date: ', newDateObjectIfADateLine);
         }
 
         // Next we try to check if this line contains a message
@@ -119,19 +118,34 @@
         // Or null if line doesn't match
         var messageParts = lineUtil.getMessagePartsIfMessageLine(line);
         if (messageParts) {
-          console.log(lineCount + ': ' + 'We have a line with a message: ', messageParts);
+          //console.log(lineCount + ': ' + 'We have a line with a message: ', messageParts);
         }
 
-        lineOutput.innerHTML = formatLine(lineCount, lineValue);
-        fileOutput.appendChild(lineOutput);
+        printLine(lineCount, lineValue, {
+            class: 'w00t',
+            title: 'fredrik'
+        });
 
         if (lineCount < MAX_LINES_TO_READ) {
           next();
         }
       }
 
-      function formatLine(lineNumber, data) {
-        return lineNumber + ': ' + data;
+      function printLine(lineNumber, content, attributes) {
+        var lineOutput = document.createElement('pre');
+        lineOutput.innerHTML = formatLine(lineNumber, content);
+        // The idea of attributes is that we can send in an object with attributes
+        // to set, like "id", "class" etc...
+        // And we finally get to use lodash for something
+        // each is a way to loop through objects and arrays in a simple and safe way
+        _.each(attributes, function(val, attr) {
+          lineOutput.setAttribute(attr, val);
+        });
+        fileOutput.appendChild(lineOutput);
+      }
+
+      function formatLine(lineNumber, content) {
+        return lineNumber + ': ' + content;
       }
 
       function handleDragOver(evt) {
@@ -145,6 +159,25 @@
         lineReader.abort();
         lineReader = new LineReader();
         fileOutput.innerHTML = '';
+      }
+
+      function search(text) {
+          reset();
+          searchTerm = new RegExp(text, 'i');
+          lineReader.on('line', handleSearchLine);
+          lineReader.read(file);
+      }
+
+      function handleSearchLine(line, next) {
+        // Keep a count of total lines looped for our own use
+        lineCount++;
+        if (line.search(searchTerm) != -1) {
+            printLine(lineCount, line);
+        }
+
+        if (lineCount < 20) {
+          next();
+        }
       }
 
       fileDrop.addEventListener('dragover', handleDragOver, false);
